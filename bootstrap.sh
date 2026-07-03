@@ -1,4 +1,11 @@
 #!/bin/bash
+set -e
+
+echo "=== Creating kind cluster ==="
+kind create cluster --config cluster.yml
+
+echo "=== Tainting mysql nodes ==="
+kubectl taint nodes -l app=mysql app=mysql:NoSchedule --overwrite
 kubectl apply -f .infrastructure/mysql/ns.yml
 kubectl apply -f .infrastructure/mysql/configMap.yml
 kubectl apply -f .infrastructure/mysql/secret.yml
